@@ -16,6 +16,16 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 
+function GameObject(attrs) {
+  this.createdAt = attrs.createdAt;
+  this.name = attrs.name;
+  this.dimensions = attrs.dimensions;
+}
+
+GameObject.prototype.destroy = function() {
+  return `${this.name} was removed from the game.`;
+}
+
 /*
   === CharacterStats ===
   * healthPoints
@@ -23,6 +33,16 @@
   * should inherit destroy() from GameObject's prototype
 */
 
+function CharacterStats (attrs) {
+  GameObject.call(this, attrs);
+  this.healthPoints = attrs.healthPoints;
+}
+
+CharacterStats.prototype = Object.create(GameObject.prototype);
+
+CharacterStats.prototype.takeDamage = function() {
+  return `${this.name} took damage.`; 
+}
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
   * team
@@ -32,7 +52,50 @@
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
- 
+
+function Humanoid (attrs) {
+  CharacterStats.call(this, attrs);
+  this.team = attrs.team;
+  this.weapons = attrs.weapons;
+  this.language = attrs.language;
+}
+
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+Humanoid.prototype.greet = function() {
+  return `${this.name} offers a greeting in ${this.language}`; 
+}
+
+function Villain (attrs) {
+  Humanoid.call(this, attrs);
+  this.mustache = attrs.mustache;
+  this.damage = attrs.damage;
+}
+
+Villain.prototype = Object.create(Humanoid.prototype);
+
+Villain.prototype.combat = function() {
+  this.damage = Math.round(Math.random() * 10);
+  if (this.damage > this.healthPoints) {
+    this.healthPoints === 0;
+    return `Dead! Try again.`;
+  }
+  else if (this.healthPoints < 0) {
+    this.healthPoints === 0;
+    return `Dead! Try again.`;
+  }
+  else if (this.healthPoints > 0) {
+    this.healthPoints -= this.damage;
+    return `You only have ${this.healthPoints - this.damage} health left. Plan your attack wisely!`
+  }
+}
+
+function Hero (attrs) {
+  Villain.call(this, attrs);
+}
+
+Hero.prototype = Object.create(Villain.prototype);
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -41,7 +104,7 @@
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
-/*
+
   const mage = new Humanoid({
     createdAt: new Date(),
     dimensions: {
@@ -92,6 +155,40 @@
     language: 'Elvish',
   });
 
+  const dragon = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 20,
+      width: 10,
+      height: 30,
+    },
+    healthPoints: 100,
+    name: 'Scarlet',
+    team: 'Dragon Lair',
+    weapons: [
+      'Fire',
+      'Tail',
+    ],
+    language: 'Dragish',
+  });
+
+  const jedi = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 2,
+      width: 1,
+      height: 5,
+    },
+    healthPoints: 100,
+    name: 'Luke',
+    team: 'Rebel Army',
+    weapons: [
+      'Force',
+      'Lightsaber',
+    ],
+    language: 'Jedi',
+  });
+
   console.log(mage.createdAt); // Today's date
   console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
   console.log(swordsman.healthPoints); // 15
@@ -102,7 +199,44 @@
   console.log(archer.greet()); // Lilith offers a greeting in Elvish.
   console.log(mage.takeDamage()); // Bruce took damage.
   console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-*/
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat());
+  console.log(jedi.combat());
+  console.log(dragon.combat()); 
+  console.log(jedi.combat()); // Doesn't seem to be working 100% correctly, but it was a solid effort.
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
